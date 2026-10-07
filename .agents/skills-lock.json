@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "code-reviewer": {
+      "source": "elrefai99/use",
+      "sourceType": "github",
+      "skillPath": "skills/code-reviewer/SKILL.md",
+      "computedHash": "cffe2d00d2828a7eab550e4699886fb6de7d68a0004d7f2f958ba42a13aeac9e"
+    },
+    "create-pr": {
+      "source": "elrefai99/use",
+      "sourceType": "github",
+      "skillPath": "skills/ebi-pr/SKILL.md",
+      "computedHash": "8bc617f48785e7c199a7760a3c82ef80bcd2ef9c5f133724f70d5f1adce73ca3"
+    },
+    "fix-issues": {
+      "source": "elrefai99/use",
+      "sourceType": "github",
+      "skillPath": "skills/fix-issues/SKILL.md",
+      "computedHash": "4194f93d1fbb81b7e2cc0979ca219d8e7bb1883d29bbdcb9816b27be5c3e7276"
+    },
+    "multi-agents": {
+      "source": "elrefai99/use",
+      "sourceType": "github",
+      "skillPath": "skills/multi-agents/SKILL.md",
+      "computedHash": "7b563e14529fd929f3489346dc859f9ba7d978ba54d4b2a43c59acb3c4f6beb0"
+    },
+    "multi-tenant": {
+      "source": "elrefai99/use",
+      "sourceType": "github",
+      "skillPath": "skills/multi-tenant/SKILL.md",
+      "computedHash": "5e66c24337a9eb38fb8f40d84ac62edd831b6f728a6d3b3ed33f0f9d93f6b866"
+    },
+    "nodejs-architect": {
+      "source": "elrefai99/use",
+      "sourceType": "github",
+      "skillPath": "skills/nodejs-architect/SKILL.md",
+      "computedHash": "9220f33b91ad1def90e728b5bcc064ba9ad8a74815c40ccf5354fb95902f2160"
+    },
+    "project-architect": {
+      "source": "elrefai99/use",
+      "sourceType": "github",
+      "skillPath": "skills/project-architect/SKILL.md",
+      "computedHash": "66b0bc3c9cdb769f6cb94448e330a8c19b12057553edef935e5c7e482933da4e"
+    }
+  }
+}

@@ -8,6 +8,8 @@ dist
 coverage
 *.local
 roadmap.md
+node_modules
+.nuxt
 
 # Editor directories and files
 .vscode/*
@@ -24,7 +26,4 @@ roadmap.md
 .env.dev
 tmp
 *.exe
-.claude
-.cursor
-.opencode
 leoxy
