@@ -8,7 +8,7 @@ import (
 
 type IDotenv struct {
 	PORT             string
-	DATABASE_URI     string
+	DATABASE_URL     string
 	DATABASE         string
 	ACCESS_TOKEN_JWT string
 }
@@ -20,7 +20,7 @@ func DotenvConfig() (*IDotenv, error) {
 
 	envData := &IDotenv{
 		PORT:             os.Getenv("PORT"),
-		DATABASE_URI:     os.Getenv("DATABASE_URI"),
+		DATABASE_URL:     os.Getenv("DATABASE_URL"),
 		DATABASE:         os.Getenv("DATABASE"),
 		ACCESS_TOKEN_JWT: os.Getenv("ACCESS_TOKEN_JWT"),
 	}
