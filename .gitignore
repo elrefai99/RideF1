@@ -8,6 +8,10 @@ dist
 coverage
 *.local
 roadmap.md
+node_modules
+.nuxt
+.agents/
+skills-lock.json
 
 # Editor directories and files
 .vscode/*
