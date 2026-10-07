@@ -2,15 +2,8 @@ package model
 
 import "time"
 
-type User struct {
-	ID        int64  `gorm:"primaryKey"`
-	Name      string `gorm:"not null"`
-	Email     string `gorm:"uniqueIndex;not null"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
 type StatusEnum string
+type UserEnum string
 
 const (
 	StatusEnumSent              StatusEnum = "SENT"
@@ -19,6 +12,21 @@ const (
 	StatusEnumFailed            StatusEnum = "FAILED"
 	StatusEnumNONE              StatusEnum = ""
 )
+
+const (
+	UserEnumActive   UserEnum = "ACTIVE"
+	UserEnumINActive UserEnum = "INACTIVE"
+)
+
+type User struct {
+	ID        int64    `gorm:"primaryKey"`
+	Name      string   `gorm:"not null"`
+	Email     string   `gorm:"uniqueIndex;not null;index:idx_status_email,priority=1;"`
+	Status    UserEnum `gorm:"not null;index:idx_status_email,priority=1;"`
+	Password  string   `gorm:"not null"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
 
 type Emails struct {
 	ID           int64      `gorm:"primaryKey"`
