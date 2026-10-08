@@ -1,0 +1,14 @@
+{
+  "name": "pbe-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "nuxt": "^4.5.2"
+  }
+}
