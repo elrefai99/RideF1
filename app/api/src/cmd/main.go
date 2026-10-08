@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/elrefai99/PBE/app/api/src/internal/database"
+	"github.com/elrefai99/PBE/app/api/src/internal/middleware"
 	"github.com/elrefai99/PBE/app/api/src/internal/server"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -35,6 +36,14 @@ func run() error {
 	}
 
 	defer sqlDB.Close()
+
+	app.Use(
+		middleware.Logger(),
+		middleware.Recovery(),
+		middleware.CORS("http://localhost:3000"),
+	)
+
+	server.NewRouters(app)
 
 	return server.NewServer(app)
 }
