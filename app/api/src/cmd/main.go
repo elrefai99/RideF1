@@ -6,6 +6,7 @@ import (
 
 	"github.com/elrefai99/PBE/app/api/src/internal/database"
 	"github.com/elrefai99/PBE/app/api/src/internal/server"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
@@ -19,6 +20,10 @@ func run() error {
 	if err := godotenv.Load(); err != nil {
 		return err
 	}
+	gin.SetMode(gin.ReleaseMode)
+
+	app := gin.Default()
+
 	db, err := database.Connect(os.Getenv("DATABASE_URL"))
 	if err != nil {
 		return err
@@ -31,5 +36,5 @@ func run() error {
 
 	defer sqlDB.Close()
 
-	return server.NewServer(server.NewRouter())
+	return server.NewServer(app)
 }
