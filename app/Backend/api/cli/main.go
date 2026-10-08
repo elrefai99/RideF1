@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/elrefai99/PBE/app/Backend/internal/config"
-	"github.com/elrefai99/PBE/app/Backend/internal/model"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	env, err := config.DotenvConfig()
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
 	app := gin.Default()
@@ -24,18 +24,12 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
-	db, err := config.Connect(env.DATABASE_URL)
+	_, err := config.Connect(os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = db.AutoMigrate(
-		&model.IUser{},
-	)
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	server := &http.Server{Addr: env.PORT, Handler: app}
+	server := &http.Server{Addr: os.Getenv("PORT"), Handler: app}
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
