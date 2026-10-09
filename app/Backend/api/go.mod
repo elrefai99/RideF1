@@ -1,4 +1,4 @@
-module github.com/elrefai99/PBE/app/api
+module github.com/elrefai99/PBE/app/Backend/api
 
 go 1.26.2
 

@@ -27,3 +27,9 @@ type User struct {
 	UpdatedAt time.Time
 	DeletedAt time.Time
 }
+
+// Ride Management
+
+// Payments
+
+// Notifications & Operations
