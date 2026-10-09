@@ -35,7 +35,7 @@ func (s *IService) RegisterService(ctx context.Context, payload user.CreateUserR
 		"email":  payload.Email,
 		"status": models.UserActive,
 	}
-	_, err := s.schema.FindOne(ctx, query)
+	_, err := s.schema.FindOne(ctx, query, "id")
 
 	if err == nil {
 		return false, errors.New("Username or Email is already used")

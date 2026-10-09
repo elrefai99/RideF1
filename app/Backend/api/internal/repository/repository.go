@@ -22,9 +22,14 @@ func Repository[T any](db *gorm.DB) *IRepository[T] {
 }
 
 // Find
-func (r *IRepository[T]) FindByID(ctx context.Context, id uint) (*T, error) {
+func (r *IRepository[T]) FindByID(ctx context.Context, id uint, col ...string) (*T, error) {
 	var data T
-	err := r.db.WithContext(ctx).First(&data, id).Error
+	db := r.db.WithContext(ctx)
+
+	if len(col) > 0 {
+		db = db.Select(col)
+	}
+	err := db.First(&data, id).Error
 	if err != nil {
 		return nil, err
 	}
@@ -32,10 +37,15 @@ func (r *IRepository[T]) FindByID(ctx context.Context, id uint) (*T, error) {
 	return &data, nil
 }
 
-func (r *IRepository[T]) FindOne(ctx context.Context, payload map[string]any) (*T, error) {
+func (r *IRepository[T]) FindOne(ctx context.Context, payload map[string]any, col ...string) (*T, error) {
 	var data T
+	db := r.db.WithContext(ctx)
 
-	err := r.db.WithContext(ctx).Where(payload).First(&data).Error
+	if len(col) > 0 {
+		db = db.Select(col)
+	}
+
+	err := db.Where(payload).First(&data).Error
 	if err != nil {
 		return nil, err
 	}
@@ -43,9 +53,15 @@ func (r *IRepository[T]) FindOne(ctx context.Context, payload map[string]any) (*
 	return &data, nil
 }
 
-func (r *IRepository[T]) Find(ctx context.Context, payload map[string]any) (*[]T, error) {
+func (r *IRepository[T]) Find(ctx context.Context, payload map[string]any, col ...string) (*[]T, error) {
 	var data []T
-	err := r.db.WithContext(ctx).Where(payload).Find(&data).Error
+	db := r.db.WithContext(ctx)
+
+	if len(col) > 0 {
+		db = db.Select(col)
+	}
+
+	err := db.Where(payload).Find(&data).Error
 
 	if err != nil {
 		return nil, err
