@@ -4,9 +4,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/elrefai99/PBE/app/api/src/internal/database"
-	"github.com/elrefai99/PBE/app/api/src/internal/middleware"
-	"github.com/elrefai99/PBE/app/api/src/internal/server"
+	"github.com/elrefai99/PBE/app/api/internal/database"
+	"github.com/elrefai99/PBE/app/api/internal/middleware"
+	"github.com/elrefai99/PBE/app/api/internal/server"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )

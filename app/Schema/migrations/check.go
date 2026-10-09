@@ -22,15 +22,6 @@ var Enums = []EnumDefinition{
 			"BAN",
 		},
 	},
-	{
-		Name: "property_status",
-		Values: []string{
-			"ACTIVE",
-			"PENDING",
-			"DELETED",
-			"STOP",
-		},
-	},
 }
 
 func EnumCheck(db *gorm.DB) error {

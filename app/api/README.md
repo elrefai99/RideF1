@@ -7,7 +7,7 @@ The API serves demo email composer data and accepts mock send requests. The send
 From this directory, run:
 
 ```sh
-go run ./src/cmd
+go run ./cmd
 ```
 
 The server listens on port `8080` by default. Set `PORT` to use another port.
