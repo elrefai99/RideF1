@@ -1,18 +1,18 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
+	"github.com/elrefai99/PBE/app/Schema/migrations"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
-	}
+	_ = godotenv.Load()
 
 	db, err := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
 	if err != nil {
@@ -26,10 +26,14 @@ func main() {
 
 	defer sqlDB.Close()
 
-	err = db.AutoMigrate(
-		&Emails{},
-	)
+	if err := migrations.EnumCheck(db); err != nil {
+		log.Fatal(err)
+	}
+
+	err = db.AutoMigrate()
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println("Done Push Database nigga")
 }
