@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sync"
 
-	JobQueue "github.com/elrefai99/PBE/app/Backend/api/internal/Queue/job"
-	"github.com/elrefai99/PBE/app/Backend/api/internal/Queue/model"
+	JobQueue "github.com/elrefai99/RideF1/app/Backend/api/internal/Queue/job"
+	"github.com/elrefai99/RideF1/app/Backend/api/internal/Queue/model"
 )
 
 type Queue struct {

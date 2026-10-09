@@ -1,4 +1,4 @@
-module github.com/elrefai99/PBE/app/Backend/api
+module github.com/elrefai99/RideF1/app/Backend/api
 
 go 1.26.2
 
@@ -7,6 +7,7 @@ require (
 	github.com/bytedance/sonic v1.15.0 // indirect
 	github.com/bytedance/sonic/loader v0.5.0 // indirect
 	github.com/cloudwego/base64x v0.1.6 // indirect
+	github.com/elrefai99/RideF1/app/Schema v0.0.0
 	github.com/gabriel-vasile/mimetype v1.4.12 // indirect
 	github.com/gin-contrib/sse v1.1.0 // indirect
 	github.com/gin-gonic/gin v1.12.0 // indirect
@@ -46,3 +47,5 @@ require (
 	gorm.io/driver/postgres v1.6.3 // indirect
 	gorm.io/gorm v1.31.2 // indirect
 )
+
+replace github.com/elrefai99/RideF1/app/Schema => ../../Schema

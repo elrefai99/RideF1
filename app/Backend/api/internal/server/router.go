@@ -1,9 +1,16 @@
 package server
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/elrefai99/RideF1/app/Backend/api/internal/Queue"
+	"github.com/elrefai99/RideF1/app/Backend/api/internal/module/auth"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+)
 
 func NewRouters(
 	r *gin.Engine,
+	db *gorm.DB,
+	worker *Queue.Queue,
 ) {
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -13,9 +20,9 @@ func NewRouters(
 	})
 
 	api := r.Group("/api")
-	auth := api.Group("/auth")
+	authRouter := api.Group("/auth")
 	{
-		auth.POST("/login")
-		auth.POST("/logout")
+		authRouter.POST("/register", auth.RegisterHandler(db, worker))
+		// authRouter.POST("/logout")
 	}
 }

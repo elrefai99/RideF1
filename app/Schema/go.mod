@@ -1,4 +1,4 @@
-module github.com/elrefai99/PBE/app/Schema
+module github.com/elrefai99/RideF1/app/Schema
 
 go 1.26.2
 

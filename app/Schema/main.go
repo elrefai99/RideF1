@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/elrefai99/PBE/app/Schema/internal/migrations"
-	models "github.com/elrefai99/PBE/app/Schema/internal/model"
+	"github.com/elrefai99/RideF1/app/Schema/internal/migrations"
+	models "github.com/elrefai99/RideF1/app/Schema/model"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

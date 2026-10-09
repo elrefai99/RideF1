@@ -1,4 +1,4 @@
-# PBE API
+# RideF1 API
 
 The API serves demo email composer data and accepts mock send requests. The send endpoint does not deliver email.
 
