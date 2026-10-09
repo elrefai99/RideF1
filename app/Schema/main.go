@@ -6,15 +6,19 @@ import (
 	"os"
 
 	"github.com/elrefai99/PBE/app/Schema/migrations"
+	models "github.com/elrefai99/PBE/app/Schema/model"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func main() {
 	_ = godotenv.Load()
 
-	db, err := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,7 +34,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = db.AutoMigrate()
+	err = db.AutoMigrate(
+		&models.User{},
+		&models.Rider_Profile{},
+		&models.Driver_Profile{},
+		&models.Tokens{},
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
