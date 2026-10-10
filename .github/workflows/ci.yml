@@ -18,17 +18,17 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: app/Backend/api/go.mod
+          go-version-file: app/api/go.mod
           cache: true
 
       - name: Download dependencies
-        working-directory: app/Backend/api
+        working-directory: app/api
         run: go mod download
 
       - name: Test
-        working-directory: app/Backend/api
+        working-directory: app/api
         run: go test ./...
 
       - name: Build
-        working-directory: app/Backend/api
+        working-directory: app/api
         run: go build ./...

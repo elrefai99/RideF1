@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/elrefai99/RideF1/app/Backend/api/internal/module/user"
-	"github.com/elrefai99/RideF1/app/Backend/api/internal/repository"
-	models "github.com/elrefai99/RideF1/app/Schema/model"
+	models "github.com/elrefai99/RideF1/Database/model"
+	"github.com/elrefai99/RideF1/app/api/internal/Common/repository"
+	"github.com/elrefai99/RideF1/app/api/internal/module/user"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )

@@ -3,7 +3,7 @@ package JobQueue
 import (
 	"fmt"
 
-	"github.com/elrefai99/RideF1/app/Backend/api/internal/Queue/model"
+	"github.com/elrefai99/RideF1/app/api/internal/Queue/model"
 )
 
 func SendEmail(jobs model.IJob) {

@@ -18,12 +18,12 @@ PORT=8080
 
 Replace the example database values with your local configuration. `PORT` is optional and defaults to `8080`. Do not commit credentials.
 
-Initialize the schema from `app/Schema` before starting the API:
+Initialize the schema from `Database` before starting the API:
 
 ```sh
 cd ../../Schema
 go run .
-cd ../Backend/api
+cd ..api
 go run ./cmd
 ```
 

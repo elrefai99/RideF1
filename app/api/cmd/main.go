@@ -4,10 +4,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/elrefai99/RideF1/app/Backend/api/internal/Queue"
-	"github.com/elrefai99/RideF1/app/Backend/api/internal/database"
-	"github.com/elrefai99/RideF1/app/Backend/api/internal/middleware"
-	"github.com/elrefai99/RideF1/app/Backend/api/internal/server"
+	"github.com/elrefai99/RideF1/app/api/internal/Common/database"
+	"github.com/elrefai99/RideF1/app/api/internal/Queue"
+	"github.com/elrefai99/RideF1/app/api/internal/middleware"
+	"github.com/elrefai99/RideF1/app/api/internal/server"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )

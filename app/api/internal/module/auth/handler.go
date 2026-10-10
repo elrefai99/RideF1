@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"github.com/elrefai99/RideF1/app/Backend/api/internal/Queue"
-	"github.com/elrefai99/RideF1/app/Backend/api/internal/module/user"
-	"github.com/elrefai99/RideF1/app/Backend/api/internal/network"
+	"github.com/elrefai99/RideF1/app/api/internal/Common/network"
+	"github.com/elrefai99/RideF1/app/api/internal/Queue"
+	"github.com/elrefai99/RideF1/app/api/internal/module/user"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
