@@ -75,6 +75,7 @@ type Tokens struct {
 	Uuid         string `gorm:"varchar(255);not null"`
 	User_id      uint   `gorm:"null;index"`
 	RefrashToken string `gorm:"varchar(255);not null"`
+IPAddress string `gorm:"type:varchar(255);not null;default:''"`
 	FCM          string `gorm:"varchar(255);not null"`
 	ExpireAt     time.Time
 	CreatedAt    time.Time
