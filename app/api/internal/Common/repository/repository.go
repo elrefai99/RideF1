@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"log"
+	"os"
 
 	"gorm.io/gorm"
 )
@@ -86,4 +88,24 @@ func (r *IRepository[T]) UpdateId(ctx context.Context, query map[string]any, pay
 // Delete
 func (r *IRepository[T]) DeleteId(ctx context.Context, query map[string]any, payload *[]T) error {
 	return r.db.WithContext(ctx).Model(new(T)).Where("id = ? ", query).Delete(payload).Error
+}
+
+// Explain
+func ExplainsQuery(ctx context.Context, db *gorm.DB, payload any, destination any) {
+	if os.Getenv("DB_EXPLAIN") == "true" {
+		query := db.Session(&gorm.Session{DryRun: true}).Where(payload).First(destination)
+		if query.Error != nil {
+			log.Printf("could not build query for EXPLAIN: %v", query.Error)
+		} else {
+			var plan []string
+			err := db.Session(&gorm.Session{NewDB: true}).WithContext(ctx).Raw("EXPLAIN "+query.Statement.SQL.String(), query.Statement.Vars...).Scan(&plan).Error
+			if err != nil {
+				log.Printf("could not explain query: %v", err)
+			} else {
+				for _, line := range plan {
+					log.Print(line)
+				}
+			}
+		}
+	}
 }

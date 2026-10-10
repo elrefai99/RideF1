@@ -29,6 +29,7 @@ func AuthService(db *gorm.DB) *IService {
 	}
 }
 
+// Register (Sign Up)
 func (s *IService) RegisterService(ctx context.Context, payload user.CreateUserRequest) (bool, error) {
 
 	query := map[string]any{
@@ -56,6 +57,7 @@ func (s *IService) RegisterService(ctx context.Context, payload user.CreateUserR
 		Fullname:  payload.Fullname,
 		Email:     strings.ToLower(payload.Email),
 		Username:  username,
+		Phone:     payload.Phone,
 		Password:  string(hashPassword),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
@@ -67,4 +69,22 @@ func (s *IService) RegisterService(ctx context.Context, payload user.CreateUserR
 		return false, err
 	}
 	return true, nil
+}
+
+// Login (Sign In)
+func (s *IService) LoginService(ctx context.Context, payload user.LoginRequest) (any, error) {
+	query := map[string]any{
+		"email":  payload.Email,
+		"status": models.UserActive,
+	}
+	data, err := s.schema.FindOne(ctx, query, "id", "password")
+	if err != nil {
+		return nil, errors.New("invalid email or password")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(data.Password), []byte(payload.Password)); err != nil {
+		return nil, errors.New("invalid email or password")
+	}
+
+	return map[string]uint{"id": data.ID}, nil
 }

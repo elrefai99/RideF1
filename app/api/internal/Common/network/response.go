@@ -17,6 +17,21 @@ type Response struct {
 	Error     string    `json:"error,omitempty"`
 }
 
+
+func OK(g *gin.Context, data any) {
+	g.JSON(
+		http.StatusOK,
+		Response{
+			Code:      200,
+			Status:    "OK",
+			Success:   true,
+			TimeStamp: time.Now(),
+			Message:   "Success Request",
+			Data:      data,
+		},
+	)
+}
+
 func Created(g *gin.Context, data any) {
 	g.JSON(
 		http.StatusCreated,

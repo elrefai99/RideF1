@@ -4,12 +4,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/elrefai99/RideF1/app/api/internal/Common/database"
+	"github.com/elrefai99/RideF1/app/api/internal/Common/config"
 	"github.com/elrefai99/RideF1/app/api/internal/Queue"
 	"github.com/elrefai99/RideF1/app/api/internal/middleware"
 	"github.com/elrefai99/RideF1/app/api/internal/server"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -19,7 +18,7 @@ func main() {
 }
 
 func run() error {
-	if err := godotenv.Load(); err != nil {
+	if err := config.LoadEnv(); err != nil {
 		return err
 	}
 	workerQueue := Queue.LeoxyWorker(10)
@@ -28,7 +27,7 @@ func run() error {
 
 	app := gin.Default()
 
-	db, err := database.Connect(os.Getenv("DATABASE_URL"))
+	db, err := config.Connect(os.Getenv("DATABASE_URL"))
 	if err != nil {
 		return err
 	}

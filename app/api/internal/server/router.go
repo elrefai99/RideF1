@@ -23,6 +23,7 @@ func NewRouters(
 	authRouter := api.Group("/auth")
 	{
 		authRouter.POST("/register", auth.RegisterHandler(db, worker))
+		authRouter.POST("/login", auth.LoginHandler(db, worker))
 		// authRouter.POST("/logout")
 	}
 }
