@@ -42,7 +42,11 @@ func run() error {
 	app.Use(
 		middleware.Logger(),
 		middleware.Recovery(),
-		middleware.CORS("http://localhost:3000"),
+		middleware.CORS(
+			os.Getenv("FRONTEND_DEV_MODE"),
+			os.Getenv("FRONTEND_LIVE_MODE"),
+			os.Getenv("SITE_DOMAIN"),
+		),
 	)
 
 	server.NewRouters(app, db, workerQueue)

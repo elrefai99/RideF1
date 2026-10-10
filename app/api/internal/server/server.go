@@ -39,7 +39,7 @@ func NewServer(handler http.Handler) error {
 
 	serverErrors := make(chan error, 1)
 	go func() {
-		log.Printf("API listening on :%s", port)
+		log.Printf("API listening on %s%s", os.Getenv("BACKEND_DEV_MODE"), port)
 		serverErrors <- httpServer.ListenAndServe()
 	}()
 
