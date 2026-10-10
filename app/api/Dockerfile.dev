@@ -1,0 +1,15 @@
+from golang:1.26.2-alpine
+
+workdir /app
+
+copy go.mod go.sum .
+
+run go mod download
+
+copy . .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o /serverRunner ./cmd
+
+EXPOSE 9000
+
+CMD ["./serverRunner"]
