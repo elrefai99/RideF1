@@ -10,7 +10,7 @@ import (
 )
 
 type Queue struct {
-	jobs chan model.IJob
+	jobs chan model.IEmailJob
 	stop chan struct{}
 
 	nextID int
@@ -25,7 +25,7 @@ var returnError = errors.New("Queue is stopped")
 
 func LeoxyWorker(size int) *Queue {
 	q := &Queue{
-		jobs: make(chan model.IJob, size),
+		jobs: make(chan model.IEmailJob, size),
 		stop: make(chan struct{}),
 	}
 	q.Start(3)
@@ -39,7 +39,7 @@ func (q *Queue) Start(size int) {
 	}
 }
 
-func (q *Queue) Add(j model.IJob) error {
+func (q *Queue) Add(j model.IEmailJob) error {
 	q.mu.Lock()
 	defer q.mu.Unlock()
 
@@ -75,7 +75,7 @@ func (q *Queue) Worker(id int) {
 	}
 
 }
-func (q *Queue) process(workerID int, job model.IJob) error {
+func (q *Queue) process(workerID int, job model.IEmailJob) error {
 	fmt.Printf(
 		"Worker %d processing job %d type=%s\n",
 		workerID,

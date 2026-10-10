@@ -1,8 +1,12 @@
 package auth
 
 import (
+	"log"
+	"os"
+
 	"github.com/elrefai99/RideF1/app/api/internal/Common/network"
 	"github.com/elrefai99/RideF1/app/api/internal/Queue"
+	"github.com/elrefai99/RideF1/app/api/internal/Queue/model"
 	"github.com/elrefai99/RideF1/app/api/internal/module/user"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -24,6 +28,24 @@ func RegisterHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
 			return
 		}
 
-		network.Created(ctx, "Success create new account")
+		emailJob := model.IEmailJob{
+			Type:    "email",
+			Sender:  os.Getenv("SMTP_USERNAME"),
+			To:      body.Email,
+			Subject: "Hi In RideF1",
+			Body:    "Wellcome",
+		}
+
+		if err := worker.Add(emailJob); err != nil {
+			log.Printf("could not queue confirmation email: %v", err)
+		}
+
+		token, err := CreateAccess(body.Email, os.Getenv("ACCESS_TOKEN"))
+		if err != nil {
+			log.Println(err)
+		}
+
+		ctx.SetCookie("access_token", token, 3600, "/", "", true, true)
+		network.Created(ctx, token)
 	}
 }

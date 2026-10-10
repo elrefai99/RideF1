@@ -24,6 +24,6 @@ func HandleError(c *gin.Context, err error) {
 		BadRequest(c, err.Error())
 
 	default:
-		Internal(c)
+		Internal(c, err)
 	}
 }

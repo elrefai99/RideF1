@@ -12,6 +12,7 @@ type Response struct {
 	Status    string    `json:"status"`
 	Success   bool      `json:"success"`
 	TimeStamp time.Time `json:"timeStamp"`
+	Message   string    `json:"message"`
 	Data      any       `json:"data,omitempty"`
 	Error     string    `json:"error,omitempty"`
 }
@@ -24,6 +25,7 @@ func Created(g *gin.Context, data any) {
 			Status:    "Created",
 			Success:   true,
 			TimeStamp: time.Now(),
+			Message:   "Success Create",
 			Data:      data,
 		},
 	)
@@ -37,7 +39,7 @@ func BadRequest(g *gin.Context, message string) {
 			Status:    "Bad Request",
 			Success:   false,
 			TimeStamp: time.Now(),
-			Error:     message,
+			Message:   message,
 		},
 	)
 }
@@ -49,7 +51,7 @@ func Unauthorized(c *gin.Context) {
 			Code:    400,
 			Status:  "unauthorized",
 			Success: false,
-			Error:   "unauthorized",
+			Message: "unauthorized",
 		})
 }
 
@@ -60,9 +62,9 @@ func NotFound(c *gin.Context) {
 	})
 }
 
-func Internal(c *gin.Context) {
+func Internal(c *gin.Context, err error) {
 	c.JSON(500, Response{
 		Success: false,
-		Error:   "internal server error",
+		Error:   err.Error(),
 	})
 }
