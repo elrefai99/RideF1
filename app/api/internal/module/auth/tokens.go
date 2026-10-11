@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 type TokenType string
@@ -40,6 +41,7 @@ func GenerateTokens(payload any, tokenType TokenType) (string, error) {
 
 	now := time.Now()
 	claims := jwt.MapClaims{
+		"t_id": uuid.NewString(),
 		"data": payload,
 		"type": string(tokenType),
 		"exp":  now.Add(lifetime).Unix(),

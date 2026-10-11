@@ -11,6 +11,14 @@ type LoginRequest struct {
 	Password string `json:"password" binding:"required,min=8"`
 }
 
+type TokenRequest struct {
+	Token string `json:"token" binding:"required"`
+}
+
+type RefreshPayload struct {
+	Uuid string `json:"uuid" binding:"required"`
+}
+
 type UserResponse struct {
 	ID       uint   `json:"id"`
 	Fullname string `json:"fullname"`

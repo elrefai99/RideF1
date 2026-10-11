@@ -10,6 +10,7 @@ import (
 
 	models "github.com/elrefai99/RideF1/Database/model"
 	"github.com/elrefai99/RideF1/app/api/internal/Common/repository"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -55,6 +56,7 @@ func (s *IService) RegisterService(ctx context.Context, payload CreateUserReques
 	createUser := &models.User{
 		Fullname:  payload.Fullname,
 		Email:     strings.ToLower(payload.Email),
+		Uuid:      uuid.New(),
 		Username:  username,
 		Phone:     payload.Phone,
 		Password:  string(hashPassword),
@@ -76,7 +78,7 @@ func (s *IService) LoginService(ctx context.Context, payload LoginRequest) (any,
 		"email":  payload.Email,
 		"status": models.UserActive,
 	}
-	data, err := s.schema.FindOne(ctx, query, "id", "password")
+	data, err := s.schema.FindOne(ctx, query, "uuid", "password")
 	if err != nil {
 		return nil, errors.New("invalid email or password")
 	}
@@ -85,5 +87,19 @@ func (s *IService) LoginService(ctx context.Context, payload LoginRequest) (any,
 		return nil, errors.New("invalid email or password")
 	}
 
-	return map[string]uint{"id": data.ID}, nil
+	return map[string]any{"data": data.Uuid}, nil
+}
+
+// Refresh Token (Sign In)
+func (s *IService) RefreshService(ctx context.Context, payload any) (any, error) {
+	query := map[string]any{
+		"uuid":   payload,
+		"status": models.UserActive,
+	}
+	data, err := s.schema.FindOne(ctx, query, "uuid")
+	if err != nil {
+		return nil, errors.New("invalid email or password")
+	}
+
+	return map[string]any{"data": data.Uuid}, nil
 }

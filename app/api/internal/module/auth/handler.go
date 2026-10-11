@@ -9,6 +9,7 @@ import (
 	"github.com/elrefai99/RideF1/app/api/internal/Queue"
 	"github.com/elrefai99/RideF1/app/api/internal/Queue/model"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
 )
 
@@ -79,12 +80,97 @@ func LoginHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
 			log.Printf("could not queue confirmation email: %v", err)
 		}
 
-		token, err := GenerateTokens(data, "access_token")
+		accessToken, err := GenerateTokens(data, "access_token")
+		if err != nil {
+			log.Println(err)
+		}
+		refreshToken, err := GenerateTokens(data, "refresh_token")
 		if err != nil {
 			log.Println(err)
 		}
 
-		ctx.SetCookie("access_token", token, int((1 * 24 * time.Minute).Seconds()), "/", "", true, true)
-		network.OK(ctx, token)
+		ctx.SetCookie("access_token", accessToken, int((1 * 24 * time.Minute).Seconds()), "/", "", true, true)
+		ctx.SetCookie("refresh_token", refreshToken, int((1 * 24 * time.Minute).Seconds()), "/", "", true, true)
+		ctx.SetCookie("_atf1", accessToken, int((1 * 24 * time.Minute).Seconds()), "/", "", true, true)
+		ctx.SetCookie("_rtf1", refreshToken, int((1 * 24 * time.Minute).Seconds()), "/", "", true, true)
+		network.OK(ctx, accessToken)
+	}
+}
+
+// Refresh Handler
+func RefreshHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
+	service := AuthService(db)
+	return func(ctx *gin.Context) {
+		var body TokenRequest
+		if err := ctx.ShouldBindJSON(&body); err != nil {
+			network.BadRequest(ctx, "Please provide a token")
+			return
+		}
+		token := body.Token
+		if token == "" {
+			network.Unauthorized(ctx, "Authentication failed")
+			return
+		}
+
+		secret := os.Getenv("REFRESH_TOKEN")
+		if secret == "" {
+			network.Unauthorized(ctx, "This token is invalid or has expired. Please request a new one")
+			return
+		}
+
+		claims := jwt.MapClaims{}
+		parsedToken, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (any, error) {
+			if token.Method != jwt.SigningMethodHS256 {
+				return nil, jwt.ErrSignatureInvalid
+			}
+			return []byte(secret), nil
+		})
+		if err != nil || !parsedToken.Valid || claims["type"] != "refresh_token" {
+			network.Unauthorized(ctx, "This token is invalid or has expired. Please request a new one")
+			return
+		}
+
+		dataToken, ok := claims["data"].(map[string]any)
+		if !ok {
+			network.Forbidden(ctx, "The server is refusing to give the requested resource")
+			return
+		}
+
+		idValue, ok := dataToken["data"]
+		if !ok {
+			network.Forbidden(ctx, "The server is refusing to give the requested resource")
+			return
+		}
+
+		data, err := service.RefreshService(ctx, idValue)
+		if err != nil {
+			network.BadRequest(ctx, err.Error())
+			return
+		}
+		accessToken, err := GenerateTokens(data, "access_token")
+		if err != nil {
+			log.Println(err)
+		}
+		refreshToken, err := GenerateTokens(data, "refresh_token")
+		if err != nil {
+			log.Println(err)
+		}
+
+		ctx.SetCookie("access_token", accessToken, int((1 * 24 * time.Minute).Seconds()), "/", "", true, true)
+		ctx.SetCookie("refresh_token", refreshToken, int((1 * 24 * time.Minute).Seconds()), "/", "", true, true)
+		ctx.SetCookie("_atf1", accessToken, int((1 * 24 * time.Minute).Seconds()), "/", "", true, true)
+		ctx.SetCookie("_rtf1", refreshToken, int((1 * 24 * time.Minute).Seconds()), "/", "", true, true)
+		network.OK(ctx, accessToken)
+	}
+}
+
+// Logout Handler
+func LogoutHandler() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		ctx.SetCookie("access_token", "", -1, "/", "", true, true)
+		ctx.SetCookie("refresh_token", "", -1, "/", "", true, true)
+		ctx.SetCookie("_atf1", "", -1, "/", "", true, true)
+		ctx.SetCookie("_rtf1", "", -1, "/", "", true, true)
+		network.OK(ctx, "Success Remove Tokens")
 	}
 }
