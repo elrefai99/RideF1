@@ -10,7 +10,6 @@ import (
 
 	models "github.com/elrefai99/RideF1/Database/model"
 	"github.com/elrefai99/RideF1/app/api/internal/Common/repository"
-	"github.com/elrefai99/RideF1/app/api/internal/module/user"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -30,7 +29,7 @@ func AuthService(db *gorm.DB) *IService {
 }
 
 // Register (Sign Up)
-func (s *IService) RegisterService(ctx context.Context, payload user.CreateUserRequest) (bool, error) {
+func (s *IService) RegisterService(ctx context.Context, payload CreateUserRequest) (bool, error) {
 
 	query := map[string]any{
 		"email":  payload.Email,
@@ -72,7 +71,7 @@ func (s *IService) RegisterService(ctx context.Context, payload user.CreateUserR
 }
 
 // Login (Sign In)
-func (s *IService) LoginService(ctx context.Context, payload user.LoginRequest) (any, error) {
+func (s *IService) LoginService(ctx context.Context, payload LoginRequest) (any, error) {
 	query := map[string]any{
 		"email":  payload.Email,
 		"status": models.UserActive,
