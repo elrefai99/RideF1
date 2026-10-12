@@ -15,6 +15,18 @@ func UserService(db *gorm.DB) *IUserService {
 	}
 }
 
-func (s *IUserService) UserProfile(ctx context.Context) {
+func (s *IUserService) UpdateUser(ctx context.Context) {
+
+}
+
+func (s *IUserService) DeleteUser(ctx context.Context) {
+
+}
+
+func (s *IUserService) RiderProfile(ctx context.Context) {
+
+}
+
+func (s *IUserService) DriverProfile(ctx context.Context) {
 
 }

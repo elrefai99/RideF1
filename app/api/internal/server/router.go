@@ -4,6 +4,7 @@ import (
 	"github.com/elrefai99/RideF1/app/api/internal/Queue"
 	"github.com/elrefai99/RideF1/app/api/internal/middleware"
 	"github.com/elrefai99/RideF1/app/api/internal/module/auth"
+	"github.com/elrefai99/RideF1/app/api/internal/module/user"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -32,6 +33,6 @@ func NewRouters(
 	userRouter := api.Group("/user")
 	userRouter.Use(middleware.ProfileMiddleware(db))
 	{
-
+		userRouter.GET("/me", user.UserProfileHandler(db, worker))
 	}
 }
