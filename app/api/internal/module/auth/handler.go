@@ -41,7 +41,14 @@ func RegisterHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
 			log.Printf("could not queue confirmation email: %v", err)
 		}
 
-		token, err := GenerateTokens(body.Email, "access_token")
+		payload := IPayload{
+			Uid:      "",
+			User_id:  0,
+			Email:    body.Email,
+			Username: "",
+		}
+
+		token, err := GenerateTokens(ctx, db, payload, PendingToken)
 		if err != nil {
 			log.Println(err)
 		}
@@ -80,11 +87,18 @@ func LoginHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
 			log.Printf("could not queue confirmation email: %v", err)
 		}
 
-		accessToken, err := GenerateTokens(data, "access_token")
+		payload := IPayload{
+			Uid:      data.Uuid.String(),
+			User_id:  data.ID,
+			Email:    body.Email,
+			Username: data.Username,
+		}
+
+		accessToken, err := GenerateTokens(ctx, db, payload, AccessToken)
 		if err != nil {
 			log.Println(err)
 		}
-		refreshToken, err := GenerateTokens(data, "refresh_token")
+		refreshToken, err := GenerateTokens(ctx, db, payload, RefreshToken)
 		if err != nil {
 			log.Println(err)
 		}
@@ -147,11 +161,19 @@ func RefreshHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
 			network.BadRequest(ctx, err.Error())
 			return
 		}
-		accessToken, err := GenerateTokens(data, "access_token")
+
+		payload := IPayload{
+			Uid:      data.Uuid.String(),
+			User_id:  data.ID,
+			Email:    data.Email,
+			Username: data.Username,
+		}
+
+		accessToken, err := GenerateTokens(ctx, db, payload, AccessToken)
 		if err != nil {
 			log.Println(err)
 		}
-		refreshToken, err := GenerateTokens(data, "refresh_token")
+		refreshToken, err := GenerateTokens(ctx, db, payload, RefreshToken)
 		if err != nil {
 			log.Println(err)
 		}

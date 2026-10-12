@@ -20,6 +20,13 @@ type IService struct {
 	schema *repository.IRepository[models.User]
 }
 
+type LoginResult struct {
+	Uuid     uuid.UUID
+	ID       uint
+	Email    string
+	Username string
+}
+
 func AuthService(db *gorm.DB) *IService {
 	schema := repository.Repository[models.User](db)
 
@@ -73,12 +80,12 @@ func (s *IService) RegisterService(ctx context.Context, payload CreateUserReques
 }
 
 // Login (Sign In)
-func (s *IService) LoginService(ctx context.Context, payload LoginRequest) (any, error) {
+func (s *IService) LoginService(ctx context.Context, payload LoginRequest) (*LoginResult, error) {
 	query := map[string]any{
 		"email":  payload.Email,
 		"status": models.UserActive,
 	}
-	data, err := s.schema.FindOne(ctx, query, "uuid", "password")
+	data, err := s.schema.FindOne(ctx, query, "uuid", "password", "id", "username")
 	if err != nil {
 		return nil, errors.New("invalid email or password")
 	}
@@ -87,19 +94,28 @@ func (s *IService) LoginService(ctx context.Context, payload LoginRequest) (any,
 		return nil, errors.New("invalid email or password")
 	}
 
-	return map[string]any{"data": data.Uuid}, nil
+	return &LoginResult{
+		Uuid:     data.Uuid,
+		ID:       data.ID,
+		Username: data.Username,
+	}, nil
 }
 
 // Refresh Token (Sign In)
-func (s *IService) RefreshService(ctx context.Context, payload any) (any, error) {
+func (s *IService) RefreshService(ctx context.Context, payload any) (*LoginResult, error) {
 	query := map[string]any{
 		"uuid":   payload,
 		"status": models.UserActive,
 	}
-	data, err := s.schema.FindOne(ctx, query, "uuid")
+	data, err := s.schema.FindOne(ctx, query, "uuid", "email", "id", "username")
 	if err != nil {
 		return nil, errors.New("invalid email or password")
 	}
 
-	return map[string]any{"data": data.Uuid}, nil
+	return &LoginResult{
+		Uuid:     data.Uuid,
+		ID:       data.ID,
+		Email:    data.Email,
+		Username: data.Username,
+	}, nil
 }

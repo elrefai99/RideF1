@@ -1,12 +1,18 @@
 package auth
 
 import (
+	"context"
 	"errors"
+	"log"
 	"os"
+	"sync"
 	"time"
 
+	models "github.com/elrefai99/RideF1/Database/model"
+	"github.com/elrefai99/RideF1/app/api/internal/Common/repository"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type TokenType string
@@ -17,7 +23,14 @@ const (
 	PendingToken TokenType = "pending_token"
 )
 
-func GenerateTokens(payload any, tokenType TokenType) (string, error) {
+type IPayload struct {
+	Uid      string
+	User_id  uint
+	Email    string
+	Username string
+}
+
+func GenerateTokens(ctx context.Context, db *gorm.DB, payload IPayload, tokenType TokenType) (string, error) {
 	var secret string
 	var lifetime time.Duration
 
@@ -54,9 +67,39 @@ func GenerateTokens(payload any, tokenType TokenType) (string, error) {
 		return "", err
 	}
 
-	go func() {
+	if payload.User_id != 0 && tokenType == RefreshToken {
+		body := models.Tokens{
+			Uuid:         uuid.New(),
+			User_id:      payload.User_id,
+			RefrashToken: signedToken,
+			ExpireAt:     now.Add(lifetime),
+		}
+		go func(ctx context.Context, db *gorm.DB, body models.Tokens) {
+			var mux sync.RWMutex
+			mux.Lock()
 
-	}()
+			defer mux.Unlock()
+
+			var tokenData models.Tokens
+			err := db.WithContext(ctx).Select("id").Where("user_id = ?", body.User_id).First(&tokenData).Error
+
+			log.Println(tokenData)
+
+			switch {
+			case errors.Is(err, gorm.ErrRecordNotFound):
+				createToken := repository.Repository[models.Tokens](db)
+				tokens := []models.Tokens{body}
+				if err := createToken.Create(ctx, &tokens); err != nil {
+					log.Printf("could not save token: %v", err)
+				}
+			case err != nil:
+				log.Printf("could not find token: %v", err)
+			default:
+				// A token already exists.
+			}
+
+		}(context.WithoutCancel(ctx), db, body)
+	}
 
 	return signedToken, nil
 }
