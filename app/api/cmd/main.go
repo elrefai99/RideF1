@@ -21,11 +21,26 @@ func run() error {
 	if err := config.LoadEnv(); err != nil {
 		return err
 	}
+	if err := middleware.Init(); err != nil {
+		return err
+	}
+
 	workerQueue := Queue.LeoxyWorker(10)
 	defer workerQueue.Close()
 	gin.SetMode(gin.ReleaseMode)
 
 	app := gin.Default()
+
+	app.Use(
+		middleware.Request_ID(),
+		middleware.Logger(),
+		middleware.Recovery(),
+		middleware.CORS(
+			os.Getenv("FRONTEND_DEV_MODE"),
+			os.Getenv("FRONTEND_LIVE_MODE"),
+			os.Getenv("SITE_DOMAIN"),
+		),
+	)
 
 	db, err := config.Connect(os.Getenv("DATABASE_URL"))
 	if err != nil {
@@ -38,16 +53,6 @@ func run() error {
 	}
 
 	defer sqlDB.Close()
-
-	app.Use(
-		middleware.Logger(),
-		middleware.Recovery(),
-		middleware.CORS(
-			os.Getenv("FRONTEND_DEV_MODE"),
-			os.Getenv("FRONTEND_LIVE_MODE"),
-			os.Getenv("SITE_DOMAIN"),
-		),
-	)
 
 	server.NewRouters(app, db, workerQueue)
 

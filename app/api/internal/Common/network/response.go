@@ -17,7 +17,6 @@ type Response struct {
 	Error     string    `json:"error,omitempty"`
 }
 
-
 func OK(g *gin.Context, data any) {
 	g.JSON(
 		http.StatusOK,
@@ -47,7 +46,7 @@ func Created(g *gin.Context, data any) {
 }
 
 func BadRequest(g *gin.Context, message string) {
-	g.JSON(
+	g.AbortWithStatusJSON(
 		http.StatusBadRequest,
 		Response{
 			Code:      400,
@@ -59,26 +58,49 @@ func BadRequest(g *gin.Context, message string) {
 	)
 }
 
-func Unauthorized(c *gin.Context) {
-	c.JSON(
+func Unauthorized(c *gin.Context, message ...string) {
+	responseMessage := ""
+	if len(message) > 0 {
+		responseMessage = message[0]
+	}
+
+	c.AbortWithStatusJSON(
 		http.StatusUnauthorized,
 		Response{
-			Code:    400,
-			Status:  "unauthorized",
-			Success: false,
-			Message: "unauthorized",
+			Code:      http.StatusUnauthorized,
+			Status:    "Unauthorized",
+			Success:   false,
+			TimeStamp: time.Now(),
+			Message:   responseMessage,
+		})
+}
+
+func Forbidden(c *gin.Context, message ...string) {
+	responseMessage := ""
+	if len(message) > 0 {
+		responseMessage = message[0]
+	}
+
+	c.AbortWithStatusJSON(
+		http.StatusForbidden,
+		Response{
+			Code:      http.StatusForbidden,
+			Status:    "Forbidden",
+			Success:   false,
+			TimeStamp: time.Now(),
+			Message:   responseMessage,
 		})
 }
 
 func NotFound(c *gin.Context) {
-	c.JSON(404, Response{
+	c.AbortWithStatusJSON(404, Response{
 		Success: false,
 		Error:   "not found",
 	})
 }
 
 func Internal(c *gin.Context, err error) {
-	c.JSON(500, Response{
+	c.AbortWithStatusJSON(500, Response{
 		Success: false,
 		Error:   err.Error(),
 	})

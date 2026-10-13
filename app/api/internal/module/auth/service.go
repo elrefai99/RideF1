@@ -10,7 +10,7 @@ import (
 
 	models "github.com/elrefai99/RideF1/Database/model"
 	"github.com/elrefai99/RideF1/app/api/internal/Common/repository"
-	"github.com/elrefai99/RideF1/app/api/internal/module/user"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -18,6 +18,13 @@ import (
 type IService struct {
 	db     *gorm.DB
 	schema *repository.IRepository[models.User]
+}
+
+type LoginResult struct {
+	Uuid     uuid.UUID
+	ID       uint
+	Email    string
+	Username string
 }
 
 func AuthService(db *gorm.DB) *IService {
@@ -30,7 +37,7 @@ func AuthService(db *gorm.DB) *IService {
 }
 
 // Register (Sign Up)
-func (s *IService) RegisterService(ctx context.Context, payload user.CreateUserRequest) (bool, error) {
+func (s *IService) RegisterService(ctx context.Context, payload CreateUserRequest) (bool, error) {
 
 	query := map[string]any{
 		"email":  payload.Email,
@@ -56,6 +63,7 @@ func (s *IService) RegisterService(ctx context.Context, payload user.CreateUserR
 	createUser := &models.User{
 		Fullname:  payload.Fullname,
 		Email:     strings.ToLower(payload.Email),
+		Uuid:      uuid.New(),
 		Username:  username,
 		Phone:     payload.Phone,
 		Password:  string(hashPassword),
@@ -72,12 +80,12 @@ func (s *IService) RegisterService(ctx context.Context, payload user.CreateUserR
 }
 
 // Login (Sign In)
-func (s *IService) LoginService(ctx context.Context, payload user.LoginRequest) (any, error) {
+func (s *IService) LoginService(ctx context.Context, payload LoginRequest) (*LoginResult, error) {
 	query := map[string]any{
 		"email":  payload.Email,
 		"status": models.UserActive,
 	}
-	data, err := s.schema.FindOne(ctx, query, "id", "password")
+	data, err := s.schema.FindOne(ctx, query, "uuid", "password", "id", "username")
 	if err != nil {
 		return nil, errors.New("invalid email or password")
 	}
@@ -86,5 +94,28 @@ func (s *IService) LoginService(ctx context.Context, payload user.LoginRequest) 
 		return nil, errors.New("invalid email or password")
 	}
 
-	return map[string]uint{"id": data.ID}, nil
+	return &LoginResult{
+		Uuid:     data.Uuid,
+		ID:       data.ID,
+		Username: data.Username,
+	}, nil
+}
+
+// Refresh Token (Sign In)
+func (s *IService) RefreshService(ctx context.Context, payload any) (*LoginResult, error) {
+	query := map[string]any{
+		"uuid":   payload,
+		"status": models.UserActive,
+	}
+	data, err := s.schema.FindOne(ctx, query, "uuid", "email", "id", "username")
+	if err != nil {
+		return nil, errors.New("invalid email or password")
+	}
+
+	return &LoginResult{
+		Uuid:     data.Uuid,
+		ID:       data.ID,
+		Email:    data.Email,
+		Username: data.Username,
+	}, nil
 }
