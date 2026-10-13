@@ -25,8 +25,6 @@ func run() error {
 		return err
 	}
 
-	workerQueue := Queue.LeoxyWorker(10)
-	defer workerQueue.Close()
 	gin.SetMode(gin.ReleaseMode)
 
 	app := gin.Default()
@@ -53,6 +51,8 @@ func run() error {
 	}
 
 	defer sqlDB.Close()
+	workerQueue := Queue.LeoxyWorker(10, db)
+	defer workerQueue.Close()
 
 	server.NewRouters(app, db, workerQueue)
 

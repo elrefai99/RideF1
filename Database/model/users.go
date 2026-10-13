@@ -61,7 +61,6 @@ type User struct {
 	Rider_Profiles  []Rider_Profile  `gorm:"foreignKey:Rider_id"`
 	Driver_Profiles []Driver_Profile `gorm:"foreignKey:Driver_id"`
 	Token           []Tokens         `gorm:"foreignKey:User_id"`
-	EmailUser       []Emails         `gorm:"foreignKey:User_id"`
 	OTPUser         []OTP            `gorm:"foreignKey:User_id"`
 }
 
@@ -123,19 +122,16 @@ type OTP struct {
 type Emails struct {
 	ID        uint       `gorm:"primaryKey"`
 	Uuid      uuid.UUID  `gorm:"type:uuid;not null;index"`
-	User_id   uint       `gorm:"null"`
-	Status    EmailsEnum `gorm:"varchar(100);not null;index:idx_emails_status_email,priority:1"`
+	Status    EmailsEnum `gorm:"varchar(100);not null;index:idx_emails_status_email,priority:1;default:'SENT'"`
 	Email_id  string     `gorm:"not null;index:idx_emails_status_email,priority:2"`
 	Sender    string     `gorm:"not null;"`
 	Receiver  string     `gorm:"not null;"`
 	Subject   string     `gorm:"not null"`
 	Body      string     `gorm:"not null"`
-	IsClicked bool       `gorm:"not null;"`
-	IsOpened  bool       `gorm:"not null;"`
+	IsClicked bool       `gorm:"not null;default:false"`
+	IsOpened  bool       `gorm:"not null;default:false"`
 	OpenedAt  time.Time
 	ClickedAt time.Time
 	CreatedAt time.Time
 	UpdatedAt time.Time
-
-	EmailUser User `gorm:"foreignKey:User_id;references:ID"`
 }

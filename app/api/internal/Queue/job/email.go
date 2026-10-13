@@ -4,14 +4,18 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/smtp"
 	"os"
+	"strconv"
 
 	"github.com/elrefai99/RideF1/app/api/internal/Queue/model"
+	"github.com/elrefai99/RideF1/app/api/internal/module/emails"
 	"github.com/resend/resend-go/v2"
+	"gorm.io/gorm"
 )
 
-func SendEmail(jobs model.IEmailJob) error {
+func SendEmail(jobs model.IEmailJob, db *gorm.DB) error {
 	host := os.Getenv("SMTP_HOST")
 	port := os.Getenv("SMTP_PORT")
 	username := os.Getenv("SMTP_USERNAME")
@@ -22,7 +26,7 @@ func SendEmail(jobs model.IEmailJob) error {
 	message := []byte(
 		"From: " + username + "\r\n" +
 			"To: " + jobs.To + "\r\n" +
-			"Subject: Hi" + "\r\n" +
+			"Subject: " + jobs.Subject + "\r\n" +
 			"MIME-Version: 1.0\r\n" +
 			"Content-Type: text/plain;charset=UTF-8\r\n" +
 			jobs.Body + "\r\n",
@@ -30,6 +34,21 @@ func SendEmail(jobs model.IEmailJob) error {
 
 	address := fmt.Sprintf("%s:%s", host, port)
 
+	emailPayload := &emails.IPayload{
+		User_id:  0,
+		Email_id: strconv.Itoa(jobs.ID),
+		Sender:   jobs.Sender,
+		Receiver: jobs.To,
+		Subject:  jobs.Subject,
+		Body:     jobs.Body,
+	}
+	go func() {
+		_, err := emails.EmailSerice(db).CreateNewEmail(context.Background(), *emailPayload)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+	}()
 	return smtp.SendMail(address, auth, username, []string{jobs.To}, message)
 }
 
