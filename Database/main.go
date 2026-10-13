@@ -39,6 +39,8 @@ func main() {
 		&models.Rider_Profile{},
 		&models.Driver_Profile{},
 		&models.Tokens{},
+		&models.OTP{},
+		&models.Emails{},
 	)
 	if err != nil {
 		log.Fatal(err)
