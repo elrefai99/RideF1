@@ -32,3 +32,7 @@ jobs:
       - name: Build
         working-directory: app/api
         run: go build ./...
+
+  docker:
+    needs: test-and-build
+    uses: ./.github/workflows/docker.yml
