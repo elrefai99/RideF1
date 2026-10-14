@@ -22,5 +22,8 @@ workdir /app
 COPY --from=build /server ./server
 
 EXPOSE 9000
+/server
+
+EXPOSE 9000
 
 CMD ["./server"]
