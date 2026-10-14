@@ -1,29 +1,19 @@
-# =============== #
-# Stage 1: Build  #
-# =============== #
-from golang:1.26.2 as builder
+FROM golang:1.26.2 AS build
 
-workdir /builder
+WORKDIR /app
 
-copy go.mod go.sum .
+COPY go.mod go.sum ./
+RUN go mod download
 
-run go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /server ./cmd/backend
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /server ./cmd
+FROM golang:1.26.2
 
-
-# =================== #
-# Stage 2: Production #
-# =================== #
-from golang:1.26.2
-
-workdir /app
+WORKDIR /app
 
 COPY --from=build /server ./server
 
-EXPOSE 9000
-/server
-
-EXPOSE 9000
+EXPOSE 8080
 
 CMD ["./server"]
