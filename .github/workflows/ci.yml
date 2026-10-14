@@ -8,7 +8,26 @@ permissions:
   contents: read
 
 jobs:
-  test-and-build:
+
+  test:
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: app/api/go.mod
+          cache: true
+
+      - name: Test
+        working-directory: app/api
+        run: go test ./...
+
+  build:
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -25,10 +44,10 @@ jobs:
         working-directory: app/api
         run: go mod download
 
-      - name: Test
-        working-directory: app/api
-        run: go test ./...
-
       - name: Build
         working-directory: app/api
         run: go build ./...
+
+  docker:
+    needs: build
+    uses: ./.github/workflows/docker.yml
