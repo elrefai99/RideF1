@@ -1,11 +1,7 @@
 name: Docker build test
 
 on:
-  push:
-  pull_request:
-
-permissions:
-  contents: read
+  workflow_call:
 
 jobs:
   docker-build:
