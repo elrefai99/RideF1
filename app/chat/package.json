@@ -2,8 +2,9 @@
   "name": "chat",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,16 @@
     "jsonwebtoken": "^9.0.3",
     "jwt": "^0.2.0",
     "mongoose": "^9.11.1",
+    "nodemon": "^3.1.14",
     "socket.io": "^4.8.4"
+  },
+  "devDependencies": {
+    "@fastify/cors": "^11.3.1",
+    "@fastify/jwt": "^10.2.4",
+    "@mohamed-elrefai/tsconfigs": "^1.0.2",
+    "@types/node": "^26.6.5",
+    "fastify": "^5.12.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
   }
 }

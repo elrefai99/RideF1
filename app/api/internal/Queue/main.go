@@ -7,11 +7,13 @@ import (
 
 	JobQueue "github.com/elrefai99/RideF1/app/api/internal/Queue/job"
 	"github.com/elrefai99/RideF1/app/api/internal/Queue/model"
+	"gorm.io/gorm"
 )
 
 type Queue struct {
 	jobs chan model.IEmailJob
 	stop chan struct{}
+	db   *gorm.DB
 
 	nextID int
 	closed bool
@@ -23,10 +25,11 @@ type Queue struct {
 
 var returnError = errors.New("Queue is stopped")
 
-func LeoxyWorker(size int) *Queue {
+func LeoxyWorker(size int, db *gorm.DB) *Queue {
 	q := &Queue{
 		jobs: make(chan model.IEmailJob, size),
 		stop: make(chan struct{}),
+		db:   db,
 	}
 	q.Start(3)
 	return q
@@ -85,8 +88,7 @@ func (q *Queue) process(workerID int, job model.IEmailJob) error {
 
 	switch job.Type {
 	case "email":
-		JobQueue.SendEmail(job)
-		return nil
+		return JobQueue.SendEmail(job, q.db)
 
 	default:
 		fmt.Printf("Worker %d skipped unknown job type: %s\n", workerID, job.Type)

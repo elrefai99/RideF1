@@ -7,23 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type EnumDefinition struct {
-	Name   string
-	Values []string
-}
-
-var Enums = []EnumDefinition{
-	{
-		Name: "user_status",
-		Values: []string{
-			"ACTIVE",
-			"INACTIVE",
-			"BLOCK",
-			"BAN",
-		},
-	},
-}
-
 func EnumCheck(db *gorm.DB) error {
 	for _, enum := range Enums {
 		var exists bool

@@ -10,6 +10,8 @@ import (
 type (
 	UserEnum   string
 	DriverEnum string
+	EmailsEnum string
+	OTPEnum    string
 )
 
 const (
@@ -24,6 +26,20 @@ const (
 	DriverReject  DriverEnum = "REJECT"
 	DriverPending DriverEnum = "PENDING"
 	DriverBlock   DriverEnum = "BLOCK"
+)
+
+const (
+	EmailSent              EmailsEnum = "SENT"
+	EmailDelivered         EmailsEnum = "DELIVERED"
+	EmailDelivered_delayed EmailsEnum = "DELIVERED_DELAYED"
+	EmailFailed            EmailsEnum = "FAILED"
+)
+
+const (
+	OTPSuccess OTPEnum = "SUCCESS"
+	OTPReject  OTPEnum = "REJECT"
+	OTPPending OTPEnum = "PENDING"
+	OTPFailed  OTPEnum = "FAILED"
 )
 
 // User SCHEMA
@@ -45,6 +61,7 @@ type User struct {
 	Rider_Profiles  []Rider_Profile  `gorm:"foreignKey:Rider_id"`
 	Driver_Profiles []Driver_Profile `gorm:"foreignKey:Driver_id"`
 	Token           []Tokens         `gorm:"foreignKey:User_id"`
+	OTPUser         []OTP            `gorm:"foreignKey:User_id"`
 }
 
 type Rider_Profile struct {
@@ -86,4 +103,35 @@ type Tokens struct {
 	UpdatedAt    time.Time
 
 	TokensUser User `gorm:"foreignKey:User_id;references:ID"`
+}
+
+type OTP struct {
+	ID        uint      `gorm:"primaryKey"`
+	Uuid      uuid.UUID `gorm:"type:uuid;not null;index"`
+	User_id   uint      `gorm:"null;index:idx_opts_status_userid,priority:1"`
+	Status    OTPEnum   `gorm:"varchar(50);not null;index:idx_opts_status_userid,priority:2;default:'PENDING'"`
+	Sender_by string    `gorm:"varchar(50);not null"`
+	Message   string    `gorm:"varchar(255);not null"`
+	ExpireAt  time.Time
+	CreatedAt time.Time
+	UpdatedAt time.Time
+
+	OTP_user User `gorm:"foreignKey:User_id;references:ID"`
+}
+
+type Emails struct {
+	ID        uint       `gorm:"primaryKey"`
+	Uuid      uuid.UUID  `gorm:"type:uuid;not null;index"`
+	Status    EmailsEnum `gorm:"varchar(100);not null;index:idx_emails_status_email,priority:1;default:'SENT'"`
+	Email_id  string     `gorm:"not null;index:idx_emails_status_email,priority:2"`
+	Sender    string     `gorm:"not null;"`
+	Receiver  string     `gorm:"not null;"`
+	Subject   string     `gorm:"not null"`
+	Body      string     `gorm:"not null"`
+	IsClicked bool       `gorm:"not null;default:false"`
+	IsOpened  bool       `gorm:"not null;default:false"`
+	OpenedAt  time.Time
+	ClickedAt time.Time
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
