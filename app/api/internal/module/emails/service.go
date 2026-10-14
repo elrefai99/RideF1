@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 
-	models "github.com/elrefai99/RideF1/Database/model"
 	"github.com/elrefai99/RideF1/app/api/internal/Common/repository"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -12,7 +11,7 @@ import (
 
 type IEmailSerice struct {
 	db     *gorm.DB
-	schema *repository.IRepository[models.Emails]
+	schema *repository.IRepository[Emails]
 }
 
 type IPayload struct {
@@ -25,7 +24,7 @@ type IPayload struct {
 }
 
 func EmailSerice(db *gorm.DB) *IEmailSerice {
-	schema := repository.Repository[models.Emails](db)
+	schema := repository.Repository[Emails](db)
 
 	return &IEmailSerice{
 		db:     db,
@@ -36,7 +35,7 @@ func EmailSerice(db *gorm.DB) *IEmailSerice {
 func (e *IEmailSerice) FindEmail(ctx context.Context, payload IPayload) (any, error) {
 
 	query := map[string]any{
-		"Status":   models.EmailSent,
+		"Status":   EmailSent,
 		"Email_id": payload.Email_id,
 	}
 
@@ -49,9 +48,9 @@ func (e *IEmailSerice) FindEmail(ctx context.Context, payload IPayload) (any, er
 }
 
 func (e *IEmailSerice) CreateNewEmail(ctx context.Context, payload IPayload) (bool, error) {
-	createEmail := &models.Emails{
+	createEmail := &Emails{
 		Uuid:     uuid.New(),
-		Status:   models.EmailSent,
+		Status:   EmailSent,
 		Email_id: payload.Email_id,
 		Sender:   payload.Sender,
 		Receiver: payload.Receiver,
@@ -59,7 +58,7 @@ func (e *IEmailSerice) CreateNewEmail(ctx context.Context, payload IPayload) (bo
 		Body:     payload.Body,
 	}
 
-	email := []models.Emails{*createEmail}
+	email := []Emails{*createEmail}
 
 	if err := e.schema.Create(ctx, &email); err != nil {
 		return false, err

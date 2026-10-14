@@ -5,8 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/elrefai99/RideF1/Database/internal/migrations"
-	models "github.com/elrefai99/RideF1/Database/model"
+	"github.com/elrefai99/RideF1/app/api/internal/database/migrations"
+	"github.com/elrefai99/RideF1/app/api/internal/module/emails"
+	"github.com/elrefai99/RideF1/app/api/internal/module/user"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -35,12 +36,12 @@ func main() {
 	}
 
 	err = db.AutoMigrate(
-		&models.User{},
-		&models.Rider_Profile{},
-		&models.Driver_Profile{},
-		&models.Tokens{},
-		&models.OTP{},
-		&models.Emails{},
+		&user.User{},
+		&user.Rider_Profile{},
+		&user.Driver_Profile{},
+		&user.Tokens{},
+		&user.OTP{},
+		&emails.Emails{},
 	)
 	if err != nil {
 		log.Fatal(err)
