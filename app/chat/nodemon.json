@@ -1,0 +1,7 @@
+{
+     "watch": [
+          "./src"
+     ],
+     "ext": "ts",
+     "exec": "node --disable-warning=ExperimentalWarning --experimental-strip-types --experimental-loader ./extensionless-ts-loader.mjs ./src/app.ts"
+}
