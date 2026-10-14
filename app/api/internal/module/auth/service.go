@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	models "github.com/elrefai99/RideF1/Database/model"
 	"github.com/elrefai99/RideF1/app/api/internal/Common/repository"
+	"github.com/elrefai99/RideF1/app/api/internal/module/user"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -17,7 +17,7 @@ import (
 
 type IService struct {
 	db     *gorm.DB
-	schema *repository.IRepository[models.User]
+	schema *repository.IRepository[user.User]
 }
 
 type LoginResult struct {
@@ -28,7 +28,7 @@ type LoginResult struct {
 }
 
 func AuthService(db *gorm.DB) *IService {
-	schema := repository.Repository[models.User](db)
+	schema := repository.Repository[user.User](db)
 
 	return &IService{
 		db:     db,
@@ -41,7 +41,7 @@ func (s *IService) RegisterService(ctx context.Context, payload CreateUserReques
 
 	query := map[string]any{
 		"email":  payload.Email,
-		"status": models.UserActive,
+		"status": user.UserActive,
 	}
 	_, err := s.schema.FindOne(ctx, query, "id")
 
@@ -60,7 +60,7 @@ func (s *IService) RegisterService(ctx context.Context, payload CreateUserReques
 		rand.IntN(1000),
 	)
 
-	createUser := &models.User{
+	createUser := &user.User{
 		Fullname:  payload.Fullname,
 		Email:     strings.ToLower(payload.Email),
 		Uuid:      uuid.New(),
@@ -70,7 +70,7 @@ func (s *IService) RegisterService(ctx context.Context, payload CreateUserReques
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
-	users := []models.User{*createUser}
+	users := []user.User{*createUser}
 
 	err = s.schema.Create(ctx, &users)
 	if err != nil {
@@ -83,7 +83,7 @@ func (s *IService) RegisterService(ctx context.Context, payload CreateUserReques
 func (s *IService) LoginService(ctx context.Context, payload LoginRequest) (*LoginResult, error) {
 	query := map[string]any{
 		"email":  payload.Email,
-		"status": models.UserActive,
+		"status": user.UserActive,
 	}
 	data, err := s.schema.FindOne(ctx, query, "uuid", "password", "id", "username")
 	if err != nil {
@@ -105,7 +105,7 @@ func (s *IService) LoginService(ctx context.Context, payload LoginRequest) (*Log
 func (s *IService) RefreshService(ctx context.Context, payload any) (*LoginResult, error) {
 	query := map[string]any{
 		"uuid":   payload,
-		"status": models.UserActive,
+		"status": user.UserActive,
 	}
 	data, err := s.schema.FindOne(ctx, query, "uuid", "email", "id", "username")
 	if err != nil {

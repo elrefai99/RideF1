@@ -8,7 +8,7 @@ import (
 
 func LoadEnv() error {
 	if os.Getenv("APP_ENV") == "live" {
-		return nil // Production gets configuration from the process environment.
+		return nil
 	}
 
 	envFile := ".env"

@@ -1,6 +1,10 @@
-package models
+package trip
 
-import "github.com/google/uuid"
+import (
+	"os/user"
+
+	"github.com/google/uuid"
+)
 
 // Ride Management
 type RideStatus string
@@ -21,5 +25,5 @@ type RideRequest struct {
 	destination_lng string     `gorm:"varchar(100);not null"`
 	Status          RideStatus `gorm:"varchar(50);index:idx_riderequest_uuid_status,priority:1;default:'SEARCH'"`
 
-	Rider User `gorm:"foreignKey:Rider_id;references:ID"`
+	Rider user.User `gorm:"foreignKey:Rider_id;references:ID"`
 }

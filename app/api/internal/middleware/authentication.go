@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	models "github.com/elrefai99/RideF1/Database/model"
 	"github.com/elrefai99/RideF1/app/api/internal/Common/network"
+	"github.com/elrefai99/RideF1/app/api/internal/module/user"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
@@ -63,13 +63,13 @@ func ProfileMiddleware(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		var user models.User
-		if err := db.WithContext(ctx.Request.Context()).Where("id = ? AND status = ?", id, models.UserActive).First(&user).Error; err != nil {
+		var userData user.User
+		if err := db.WithContext(ctx.Request.Context()).Where("id = ? AND status = ?", id, user.UserActive).First(&userData).Error; err != nil {
 			network.Forbidden(ctx, "The server is refusing to give the requested resource")
 			return
 		}
 
-		ctx.Set("user", user)
+		ctx.Set("user", userData)
 		ctx.Next()
 	}
 }
