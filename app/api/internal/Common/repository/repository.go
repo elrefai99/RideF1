@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -25,6 +26,9 @@ func Repository[T any](db *gorm.DB) *IRepository[T] {
 
 // Find
 func (r *IRepository[T]) FindByID(ctx context.Context, id uint, col ...string) (*T, error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
 	var data T
 	db := r.db.WithContext(ctx)
 
@@ -40,6 +44,9 @@ func (r *IRepository[T]) FindByID(ctx context.Context, id uint, col ...string) (
 }
 
 func (r *IRepository[T]) FindOne(ctx context.Context, payload map[string]any, col ...string) (*T, error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
 	var data T
 	db := r.db.WithContext(ctx)
 
@@ -56,6 +63,9 @@ func (r *IRepository[T]) FindOne(ctx context.Context, payload map[string]any, co
 }
 
 func (r *IRepository[T]) Find(ctx context.Context, payload map[string]any, col ...string) (*[]T, error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
 	var data []T
 	db := r.db.WithContext(ctx)
 
@@ -73,7 +83,7 @@ func (r *IRepository[T]) Find(ctx context.Context, payload map[string]any, col .
 }
 
 // Create
-func (r *IRepository[T]) Create(ctx context.Context, payload *[]T) error { // can work in create and create many
+func (r *IRepository[T]) Create(ctx context.Context, payload *[]T) error {
 	return r.db.WithContext(ctx).Create(payload).Error
 }
 
