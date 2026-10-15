@@ -29,6 +29,7 @@ func run() error {
 
 	app := gin.Default()
 
+	// Server Settings
 	app.Use(
 		middleware.Request_ID(),
 		middleware.Logger(),
@@ -40,10 +41,17 @@ func run() error {
 		),
 	)
 
+	// Database Connect
 	db, err := config.Connect(os.Getenv("DATABASE_URL"))
 	if err != nil {
 		return err
 	}
+
+	redisClient, err := config.ConnectRedis(os.Getenv("REDIS_URL"))
+	if err != nil {
+		return err
+	}
+	defer redisClient.Close()
 
 	sqlDB, err := db.DB()
 	if err != nil {
@@ -51,9 +59,12 @@ func run() error {
 	}
 
 	defer sqlDB.Close()
+
+	// Worker Pool
 	workerQueue := Queue.LeoxyWorker(10, db)
 	defer workerQueue.Close()
 
+	// Endpoints
 	server.NewRouters(app, db, workerQueue)
 
 	return server.NewServer(app)
