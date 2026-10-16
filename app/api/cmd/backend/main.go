@@ -41,6 +41,11 @@ func run() error {
 		),
 	)
 
+	cld, err := config.NewCloudinary()
+	if err != nil {
+		return err
+	}
+
 	// Database Connect
 	db, err := config.Connect(os.Getenv("DATABASE_URL"))
 	if err != nil {
@@ -65,7 +70,7 @@ func run() error {
 	defer workerQueue.Close()
 
 	// Endpoints
-	server.NewRouters(app, db, workerQueue)
+	server.NewRouters(app, db, workerQueue, cld)
 
 	return server.NewServer(app)
 }

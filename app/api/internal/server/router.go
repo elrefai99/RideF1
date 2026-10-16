@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/cloudinary/cloudinary-go/v2"
 	worker "github.com/elrefai99/RideF1/app/api/cmd/Worker"
 	"github.com/elrefai99/RideF1/app/api/internal/module/auth"
 	"github.com/elrefai99/RideF1/app/api/internal/module/user"
@@ -12,6 +13,7 @@ func NewRouters(
 	r *gin.Engine,
 	db *gorm.DB,
 	worker *worker.Queue,
+	cld *cloudinary.Cloudinary,
 ) {
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{

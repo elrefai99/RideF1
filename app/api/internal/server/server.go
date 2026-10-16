@@ -39,6 +39,8 @@ func NewServer(handler http.Handler) error {
 
 	serverErrors := make(chan error, 1)
 	go func() {
+		log.Printf("✅ Success connected to %s\n", os.Getenv("DATABASE_URL"))
+		log.Printf("🛢️  Redis connected successfully: %s\n", os.Getenv("REDIS_URL"))
 		log.Printf("🌐 API listening on %s%s", os.Getenv("BACKEND_DEV_MODE"), port)
 		serverErrors <- httpServer.ListenAndServe()
 	}()

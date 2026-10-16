@@ -3,7 +3,6 @@ package config
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -23,7 +22,5 @@ func ConnectRedis(redisURL string) (*redis.Client, error) {
 		client.Close()
 		return nil, fmt.Errorf("connect to Redis: %w", err)
 	}
-	log.Printf("🛢️  Redis connected successfully: %s\n", redisURL)
-
 	return client, nil
 }
