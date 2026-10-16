@@ -51,7 +51,6 @@ func ProfileMiddleware(db *gorm.DB) gin.HandlerFunc {
 			network.Forbidden(ctx, "The server is refusing to give the requested resource")
 			return
 		}
-		fmt.Println(data)
 		idValue, ok := data["User_id"]
 		if !ok {
 			network.Forbidden(ctx, "The server is refusing to give the requested resource")
