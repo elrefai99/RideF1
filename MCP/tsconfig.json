@@ -1,0 +1,17 @@
+{
+  "extends": "@mohamed-elrefai/tsconfigs",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "ignoreDeprecations": "6.0",
+    "rootDir": "./",
+    "outDir": "dist",
+    "typeRoots": [
+      "backend/types",
+      "./node_modules/@types"
+    ],
+    "types": [
+      "node",
+    ]
+  },
+}

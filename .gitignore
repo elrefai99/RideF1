@@ -10,7 +10,7 @@ coverage
 roadmap.md
 node_modules
 .nuxt
-
+.codex
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -83,8 +83,6 @@ func GenerateTokens(ctx context.Context, db *gorm.DB, payload IPayload, tokenTyp
 			var tokenData user.Tokens
 			err := db.WithContext(ctx).Select("id").Where("user_id = ?", body.User_id).First(&tokenData).Error
 
-			log.Println(tokenData)
-
 			switch {
 			case errors.Is(err, gorm.ErrRecordNotFound):
 				createToken := repository.Repository[user.Tokens](db)
