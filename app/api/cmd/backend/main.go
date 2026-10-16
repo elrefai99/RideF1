@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
+	worker "github.com/elrefai99/RideF1/app/api/cmd/Worker"
 	"github.com/elrefai99/RideF1/app/api/internal/Common/config"
-	"github.com/elrefai99/RideF1/app/api/internal/Queue"
 	"github.com/elrefai99/RideF1/app/api/internal/middleware"
 	"github.com/elrefai99/RideF1/app/api/internal/server"
 	"github.com/gin-gonic/gin"
@@ -29,6 +29,7 @@ func run() error {
 
 	app := gin.Default()
 
+	// Server Settings
 	app.Use(
 		middleware.Request_ID(),
 		middleware.Logger(),
@@ -40,10 +41,22 @@ func run() error {
 		),
 	)
 
+	cld, err := config.NewCloudinary()
+	if err != nil {
+		return err
+	}
+
+	// Database Connect
 	db, err := config.Connect(os.Getenv("DATABASE_URL"))
 	if err != nil {
 		return err
 	}
+
+	redisClient, err := config.ConnectRedis(os.Getenv("REDIS_URL"))
+	if err != nil {
+		return err
+	}
+	defer redisClient.Close()
 
 	sqlDB, err := db.DB()
 	if err != nil {
@@ -51,10 +64,13 @@ func run() error {
 	}
 
 	defer sqlDB.Close()
-	workerQueue := Queue.LeoxyWorker(10, db)
+
+	// Worker Pool
+	workerQueue := worker.F1Worker(10, db)
 	defer workerQueue.Close()
 
-	server.NewRouters(app, db, workerQueue)
+	// Endpoints
+	server.NewRouters(app, db, workerQueue, cld)
 
 	return server.NewServer(app)
 }

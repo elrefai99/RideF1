@@ -13,6 +13,7 @@ Create a `.env` file in this directory:
 
 ```env
 DATABASE_URL=postgres://postgres:password@localhost:5432/ridef1?sslmode=disable
+REDIS_URL=redis://default:password@localhost:6379
 PORT=8080
 ```
 

@@ -5,15 +5,15 @@ import (
 	"os"
 	"time"
 
+	worker "github.com/elrefai99/RideF1/app/api/cmd/Worker"
 	"github.com/elrefai99/RideF1/app/api/internal/Common/network"
-	"github.com/elrefai99/RideF1/app/api/internal/Queue"
 	"github.com/elrefai99/RideF1/app/api/internal/Queue/model"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
 )
 
-func RegisterHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
+func RegisterHandler(db *gorm.DB, worker *worker.Queue) gin.HandlerFunc {
 	service := AuthService(db)
 	return func(ctx *gin.Context) {
 
@@ -59,7 +59,7 @@ func RegisterHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
 }
 
 // Login Handler
-func LoginHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
+func LoginHandler(db *gorm.DB, worker *worker.Queue) gin.HandlerFunc {
 	service := AuthService(db)
 	return func(ctx *gin.Context) {
 
@@ -112,7 +112,7 @@ func LoginHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
 }
 
 // Refresh Handler
-func RefreshHandler(db *gorm.DB, worker *Queue.Queue) gin.HandlerFunc {
+func RefreshHandler(db *gorm.DB, worker *worker.Queue) gin.HandlerFunc {
 	service := AuthService(db)
 	return func(ctx *gin.Context) {
 		var body TokenRequest
