@@ -1,7 +1,19 @@
 import { Pool } from "pg";
 
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+     throw new Error("DATABASE_URL is missing. Add it to MCP/.env or the MCP server environment.");
+}
+
+const databasePassword = new URL(databaseUrl).password;
+
+if (!databasePassword) {
+     throw new Error("DATABASE_URL has no password. Add the PostgreSQL password to MCP/.env or the MCP server environment.");
+}
+
 const pool = new Pool({
-     connectionString: process.env.DATABASE_URL,
+     connectionString: databaseUrl,
 });
 
 export const allUser = async (payload: { limit?: number }) => {
