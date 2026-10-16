@@ -1,4 +1,4 @@
-package Queue
+package worker
 
 import (
 	"errors"
@@ -25,7 +25,7 @@ type Queue struct {
 
 var returnError = errors.New("Queue is stopped")
 
-func LeoxyWorker(size int, db *gorm.DB) *Queue {
+func F1Worker(size int, db *gorm.DB) *Queue {
 	q := &Queue{
 		jobs: make(chan model.IEmailJob, size),
 		stop: make(chan struct{}),

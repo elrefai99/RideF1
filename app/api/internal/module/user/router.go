@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/elrefai99/RideF1/app/api/internal/Queue"
+	worker "github.com/elrefai99/RideF1/app/api/cmd/Worker"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -9,7 +9,7 @@ import (
 func UserRouter(
 	api *gin.RouterGroup,
 	db *gorm.DB,
-	worker *Queue.Queue,
+	worker *worker.Queue,
 ) {
 	userRouter := api.Group("/user")
 	userRouter.Use(ProfileMiddleware(db))

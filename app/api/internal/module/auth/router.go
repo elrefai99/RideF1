@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/elrefai99/RideF1/app/api/internal/Queue"
+	worker "github.com/elrefai99/RideF1/app/api/cmd/Worker"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -9,7 +9,7 @@ import (
 func AuthRouter(
 	api *gin.RouterGroup,
 	db *gorm.DB,
-	worker *Queue.Queue,
+	worker *worker.Queue,
 ) {
 	authRouter := api.Group("/auth")
 	{

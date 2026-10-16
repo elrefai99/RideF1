@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
+	worker "github.com/elrefai99/RideF1/app/api/cmd/Worker"
 	"github.com/elrefai99/RideF1/app/api/internal/Common/config"
-	"github.com/elrefai99/RideF1/app/api/internal/Queue"
 	"github.com/elrefai99/RideF1/app/api/internal/middleware"
 	"github.com/elrefai99/RideF1/app/api/internal/server"
 	"github.com/gin-gonic/gin"
@@ -61,7 +61,7 @@ func run() error {
 	defer sqlDB.Close()
 
 	// Worker Pool
-	workerQueue := Queue.LeoxyWorker(10, db)
+	workerQueue := worker.F1Worker(10, db)
 	defer workerQueue.Close()
 
 	// Endpoints
