@@ -1,0 +1,26 @@
+{
+  "name": "mcp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "@mohamed-elrefai/tsconfigs": "^1.0.2",
+    "@types/dotenv": "^8.2.3",
+    "@types/node": "^26.6.5",
+    "@types/pg": "^8.23.1",
+    "gen-import": "^2.1.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.8",
+    "pg": "^8.23.1"
+  }
+}
