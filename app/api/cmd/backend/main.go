@@ -9,6 +9,7 @@ import (
 	"github.com/elrefai99/RideF1/app/api/internal/middleware"
 	"github.com/elrefai99/RideF1/app/api/internal/server"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -28,6 +29,7 @@ func run() error {
 	gin.SetMode(gin.ReleaseMode)
 
 	app := gin.Default()
+	app.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	// Server Settings
 	app.Use(
@@ -39,6 +41,7 @@ func run() error {
 			os.Getenv("FRONTEND_LIVE_MODE"),
 			os.Getenv("SITE_DOMAIN"),
 		),
+		middleware.PrometheusMetrics(),
 	)
 
 	cld, err := config.NewCloudinary()

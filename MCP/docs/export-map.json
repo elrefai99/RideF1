@@ -1,0 +1,132 @@
+{
+  "totalFiles": 5,
+  "totalExports": 21,
+  "totalImportEdges": 0,
+  "files": [
+    {
+      "file": "src/config/dotenv.ts",
+      "exports": [
+        {
+          "name": "default",
+          "kind": "default"
+        }
+      ],
+      "importedBy": [
+        "src/index.ts"
+      ],
+      "importsFrom": []
+    },
+    {
+      "file": "src/functions/user.ts",
+      "exports": [
+        {
+          "name": "allUser",
+          "kind": "value"
+        },
+        {
+          "name": "firstUser",
+          "kind": "value"
+        },
+        {
+          "name": "countAllUsers",
+          "kind": "value"
+        }
+      ],
+      "importedBy": [
+        "src/index.ts"
+      ],
+      "importsFrom": []
+    },
+    {
+      "file": "src/gen-import.ts",
+      "exports": [
+        {
+          "name": "dotenv",
+          "kind": "value"
+        },
+        {
+          "name": "allUser",
+          "kind": "value"
+        },
+        {
+          "name": "firstUser",
+          "kind": "value"
+        },
+        {
+          "name": "countAllUsers",
+          "kind": "value"
+        },
+        {
+          "name": "GET_LAST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_FIRST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_COUNT_USERS",
+          "kind": "value"
+        }
+      ],
+      "importedBy": [],
+      "importsFrom": []
+    },
+    {
+      "file": "src/gen.config.ts",
+      "exports": [
+        {
+          "name": "dotenv",
+          "kind": "value"
+        },
+        {
+          "name": "allUser",
+          "kind": "value"
+        },
+        {
+          "name": "firstUser",
+          "kind": "value"
+        },
+        {
+          "name": "countAllUsers",
+          "kind": "value"
+        },
+        {
+          "name": "GET_LAST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_FIRST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_COUNT_USERS",
+          "kind": "value"
+        }
+      ],
+      "importedBy": [],
+      "importsFrom": []
+    },
+    {
+      "file": "src/tools/user.ts",
+      "exports": [
+        {
+          "name": "GET_LAST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_FIRST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_COUNT_USERS",
+          "kind": "value"
+        }
+      ],
+      "importedBy": [
+        "src/index.ts"
+      ],
+      "importsFrom": []
+    }
+  ]
+}

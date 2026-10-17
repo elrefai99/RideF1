@@ -30,6 +30,10 @@ go run ./cmd
 
 ## Routes
 
+### `GET /metrics`
+
+Exposes Prometheus metrics for HTTP requests and server CPU, memory, and disk usage. Prometheus should scrape this endpoint every 15 seconds. Set `MONITORING_DISK_PATH` to the mount point to monitor; it defaults to `/` on Linux and `C:\` on Windows.
+
 ### `GET /health`
 
 Returns a JSON health status.
