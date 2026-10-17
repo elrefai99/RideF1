@@ -25,3 +25,18 @@ func UserProfileHandler(db *gorm.DB, worker *worker.Queue) gin.HandlerFunc {
 		network.OK(ctx, currentUser)
 	}
 }
+
+func UpdateAccountHandler(db *gorm.DB, worker *worker.Queue) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		image, err := ctx.FormFile("img")
+		if err != nil {
+			ctx.JSON(400, gin.H{"error": "image field is required"})
+			return
+		}
+
+		ctx.JSON(200, gin.H{
+			"filename": image.Filename,
+			"size":     image.Size,
+		})
+	}
+}

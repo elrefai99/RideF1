@@ -17,7 +17,7 @@ func UserService(db *gorm.DB) *IUserService {
 }
 
 func (s *IUserService) UpdateUser(ctx context.Context) {
-
+	// ctx, cancel := ctx.
 }
 
 func (s *IUserService) DeleteUser(ctx context.Context) {

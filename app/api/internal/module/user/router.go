@@ -15,5 +15,6 @@ func UserRouter(
 	userRouter.Use(ProfileMiddleware(db))
 	{
 		userRouter.GET("/me", UserProfileHandler(db, worker))
+		userRouter.PUT("/edit/:id", UpdateAccountHandler(db, worker))
 	}
 }
