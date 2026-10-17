@@ -23,7 +23,7 @@ export const allUser = async (payload: { limit?: number }) => {
           : 10;
 
      const result = await pool.query(
-          "SELECT id, username FROM users ORDER BY created_at DESC LIMIT $1",
+          "SELECT id, username, fullname, email FROM users ORDER BY created_at DESC LIMIT $1",
           [limit]
      );
 
