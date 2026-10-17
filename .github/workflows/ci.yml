@@ -72,7 +72,7 @@ jobs:
 
   build-mcp:
     runs-on: ubuntu-latest
-    needs: check-mcp
+    needs: test-mcp
 
     steps:
       - name: Checkout repository
