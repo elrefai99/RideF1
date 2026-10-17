@@ -29,3 +29,25 @@ export const allUser = async (payload: { limit?: number }) => {
 
      return result.rows;
 };
+
+export const firstUser = async (payload: { limit?: number }) => {
+     const requestedLimit = Number(payload?.limit ?? 10);
+     const limit = Number.isInteger(requestedLimit)
+          ? Math.min(Math.max(requestedLimit, 1), 100)
+          : 10;
+
+     const result = await pool.query(
+          "SELECT id, username, fullname, email FROM users ORDER BY created_at ASC LIMIT $1",
+          [limit]
+     );
+
+     return result.rows;
+};
+
+export const countAllUsers = async () => {
+     const result = await pool.query(
+          "SELECT COUNT(*) AS total_users FROM users WHERE status = 'ACTIVE';",
+     );
+
+     return result.rows;
+};

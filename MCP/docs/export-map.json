@@ -1,6 +1,6 @@
 {
   "totalFiles": 5,
-  "totalExports": 9,
+  "totalExports": 21,
   "totalImportEdges": 0,
   "files": [
     {
@@ -22,6 +22,14 @@
         {
           "name": "allUser",
           "kind": "value"
+        },
+        {
+          "name": "firstUser",
+          "kind": "value"
+        },
+        {
+          "name": "countAllUsers",
+          "kind": "value"
         }
       ],
       "importedBy": [
@@ -41,7 +49,23 @@
           "kind": "value"
         },
         {
+          "name": "firstUser",
+          "kind": "value"
+        },
+        {
+          "name": "countAllUsers",
+          "kind": "value"
+        },
+        {
           "name": "GET_LAST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_FIRST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_COUNT_USERS",
           "kind": "value"
         }
       ],
@@ -60,7 +84,23 @@
           "kind": "value"
         },
         {
+          "name": "firstUser",
+          "kind": "value"
+        },
+        {
+          "name": "countAllUsers",
+          "kind": "value"
+        },
+        {
           "name": "GET_LAST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_FIRST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_COUNT_USERS",
           "kind": "value"
         }
       ],
@@ -72,6 +112,14 @@
       "exports": [
         {
           "name": "GET_LAST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_FIRST_USERS",
+          "kind": "value"
+        },
+        {
+          "name": "GET_COUNT_USERS",
           "kind": "value"
         }
       ],
