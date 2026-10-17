@@ -39,7 +39,7 @@ func (e *IEmailSerice) FindEmail(ctx context.Context, payload IPayload) (any, er
 		"Email_id": payload.Email_id,
 	}
 
-	data, err := e.schema.FindOne(ctx, query)
+	data, err := e.schema.FindOne(ctx, query, nil, nil)
 	if err == nil {
 		return false, errors.New("Username or Email is already used")
 	}

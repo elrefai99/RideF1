@@ -189,10 +189,10 @@ func RefreshHandler(db *gorm.DB, worker *worker.Queue) gin.HandlerFunc {
 // Logout Handler
 func LogoutHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ctx.SetCookie("access_token", "", -1, "/", "", true, true)
-		ctx.SetCookie("refresh_token", "", -1, "/", "", true, true)
-		ctx.SetCookie("_atf1", "", -1, "/", "", true, true)
-		ctx.SetCookie("_rtf1", "", -1, "/", "", true, true)
+		ctx.SetCookie("access_token", "", -1, "/", "", false, true)
+		ctx.SetCookie("refresh_token", "", -1, "/", "", false, true)
+		ctx.SetCookie("_atf1", "", -1, "/", "", false, true)
+		ctx.SetCookie("_rtf1", "", -1, "/", "", false, true)
 		network.OK(ctx, "Success Remove Tokens")
 	}
 }

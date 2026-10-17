@@ -43,7 +43,7 @@ func (s *IService) RegisterService(ctx context.Context, payload CreateUserReques
 		"email":  payload.Email,
 		"status": user.UserActive,
 	}
-	_, err := s.schema.FindOne(ctx, query, "id")
+	_, err := s.schema.FindOne(ctx, query, []string{"id"}, nil)
 
 	if err == nil {
 		return false, errors.New("Username or Email is already used")
@@ -85,7 +85,9 @@ func (s *IService) LoginService(ctx context.Context, payload LoginRequest) (*Log
 		"email":  payload.Email,
 		"status": user.UserActive,
 	}
-	data, err := s.schema.FindOne(ctx, query, "uuid", "password", "id", "username")
+	data, err := s.schema.FindOne(ctx, query, []string{
+		"uuid", "password", "id", "username",
+	}, nil)
 	if err != nil {
 		return nil, errors.New("invalid email or password")
 	}
@@ -107,7 +109,7 @@ func (s *IService) RefreshService(ctx context.Context, payload any) (*LoginResul
 		"uuid":   payload,
 		"status": user.UserActive,
 	}
-	data, err := s.schema.FindOne(ctx, query, "uuid", "email", "id", "username")
+	data, err := s.schema.FindOne(ctx, query, []string{"uuid", "email", "id", "username"}, nil)
 	if err != nil {
 		return nil, errors.New("invalid email or password")
 	}

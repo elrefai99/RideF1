@@ -63,7 +63,7 @@ func ProfileMiddleware(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		var userData user.User
-		if err := db.WithContext(ctx.Request.Context()).Where("id = ? AND status = ?", id, user.UserActive).First(&userData).Error; err != nil {
+		if err := db.WithContext(ctx.Request.Context()).Omit("password").Where("id = ? AND status = ?", id, user.UserActive).First(&userData).Error; err != nil {
 			network.Forbidden(ctx, "The server is refusing to give the requested resource")
 			return
 		}

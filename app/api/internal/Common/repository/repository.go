@@ -43,7 +43,7 @@ func (r *IRepository[T]) FindByID(ctx context.Context, id uint, col ...string) (
 	return &data, nil
 }
 
-func (r *IRepository[T]) FindOne(ctx context.Context, payload map[string]any, col ...string) (*T, error) {
+func (r *IRepository[T]) FindOne(ctx context.Context, payload map[string]any, col []string, omit []string) (*T, error) {
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
 
@@ -52,6 +52,10 @@ func (r *IRepository[T]) FindOne(ctx context.Context, payload map[string]any, co
 
 	if len(col) > 0 {
 		db = db.Select(col)
+	}
+
+	if len(omit) > 0 {
+		db = db.Omit(omit...)
 	}
 
 	err := db.Where(payload).First(&data).Error
