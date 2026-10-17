@@ -24,6 +24,6 @@ func NewRouters(
 	api := r.Group("/api")
 
 	auth.AuthRouter(api, db, worker)
-	user.UserRouter(api, db, worker)
+	user.UserRouter(api, db, worker, cld)
 
 }
